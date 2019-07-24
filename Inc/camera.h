@@ -24,7 +24,6 @@
 #define COLS 160
 
 void camera_init(I2C_HandleTypeDef* hi2c);
-int camera_check();
 void camera_mode(bool mode);
 int camera_capture_image(uint8_t image_buffer[][2*COLS]);
 int camera_capture_image2(uint8_t image_buffer[][2*COLS]);
