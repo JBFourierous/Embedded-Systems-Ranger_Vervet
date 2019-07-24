@@ -247,42 +247,6 @@ void camera_init(I2C_HandleTypeDef* hi2c) {
 	ov7670_init(hi2c);
 }
 
-/** @brief Checks if the camera registers are correctly set
- *  @param  none
- *  @return true if camera is correctly initialized, false otherwise
- */
-static int regs_check(const RegisterData* reg_data) {
-	volatile uint8_t reg_addr = 0, reg_val = 0, tmp = 0, i = 0;
-	bool res = true;
-	int errors = 0;
-	RegisterData curr = reg_data[i];
-	reg_addr = curr.addr;
-	reg_val = curr.val;
-	tmp = 0;
-	while(reg_addr != 0xff) {
-		tmp = ov7670_read_reg(reg_addr);
-		res = res && (tmp == reg_val);
-		if(!res)
-			errors++;
-		HAL_Delay(10);
-		i++;
-		curr = reg_data[i];
-		reg_addr = curr.addr;
-		reg_val = curr.val;
-	}
-	return errors;
-}
-
-int camera_check() {
-	int r1, r2, r3, r4;
-	r1 = regs_check(regsYUV422);
-	r2 = regs_check(regsBase);
-	r3 = regs_check(regsQQVGA);
-	//r4 = regs_check(regsDefault);
-	return r1 + r2 + r3;
-	//return regs_check(regsYUV422) && regs_check(regsBase) && regs_check(regsQQVGA) && regs_check(regsDefault);
-}
-
 /** @brief Sets the camera operating mode
  *  @param  mode if true the camera is turn on, if false the camera is in standby mode
  *  @return none
