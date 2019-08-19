@@ -11,9 +11,9 @@
 #include "ctype.h"
 
 // GSM global variables declaration
-uint8_t GSM_response[100];								// buffer for GSM module response
+uint8_t GSM_response[100];							// buffer for GSM module response
 uint8_t GSM_new_response_size = 0;						// size of the expected response of the module
-bool GSM_cfun = true;									// flag indicating the working mode of the module
+bool GSM_cfun = true;								// flag indicating the working mode of the module
 
 // ----------------------------------------------------- INNER FUNCTIONS ------------------------------------------------------------- //
 
@@ -73,8 +73,8 @@ static void send_AT_command(uint8_t command) {
 			break;
 		case CONFAPN:
 			GSM_new_response_size = OK_LEN;
-			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+SAPBR=3,1,\"APN\",\"mobile.vodafone.it\"\r\n",
-					sizeof("AT+SAPBR=3,1,\"APN\",\"mobile.vodafone.it\"\r\n"), HAL_MAX_DELAY);
+			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+SAPBR=3,1,\"APN\",\"my_apn\"\r\n",
+					sizeof("AT+SAPBR=3,1,\"APN\",\"my_apn\"\r\n"), HAL_MAX_DELAY);
 			HAL_UART_Receive_IT(&huart1, GSM_response, OK_LEN);
 			break;
 		case OPENSAPBR:
@@ -94,8 +94,8 @@ static void send_AT_command(uint8_t command) {
 			break;
 		case HTTPPARA_URL:
 			GSM_new_response_size = OK_LEN;
-			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+HTTPPARA=\"URL\",\"https://ptsv2.com/t/provaSIM800\"\r\n",
-					sizeof("AT+HTTPPARA=\"URL\",\"https://ptsv2.com/t/provaSIM800\"\r\n"), HAL_MAX_DELAY);
+			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+HTTPPARA=\"URL\",\"http://my_server\"\r\n",
+					sizeof("AT+HTTPPARA=\"URL\",\"http://my_server\\"\r\n"), HAL_MAX_DELAY);
 			// qua va il nostro ricevente
 			HAL_UART_Receive_IT(&huart1, GSM_response, OK_LEN);
 			break;
@@ -108,7 +108,6 @@ static void send_AT_command(uint8_t command) {
 		case HTTPDATA:
 			GSM_new_response_size = HTTPDATA_LEN;
 			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+HTTPDATA=38400,60000\r\n", sizeof("AT+HTTPDATA=38400,60000\r\n"), HAL_MAX_DELAY);
-			//HAL_UART_Transmit(&huart1, (uint8_t*)"AT+HTTPDATA=8,5000\r\n", sizeof("AT+HTTPDATA=8,5000\r\n"), HAL_MAX_DELAY);
 			HAL_UART_Receive_IT(&huart1, GSM_response, HTTPDATA_LEN);
 			break;
 		case HTTPACTION:
@@ -139,8 +138,7 @@ static void send_AT_command(uint8_t command) {
 			break;
 		case CMGS:
 			GSM_new_response_size = CMGS_LEN;
-			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+CMGS=\"+393663727799\"\r\n", sizeof("AT+CMGS=\"+393663727799\"\r\n"), HAL_MAX_DELAY);
-			//HAL_UART_Transmit(&huart1, (uint8_t*)"AT+CMGS=\"+393385277931\"\r\n", sizeof("AT+CMGS=\"+393385277931\"\r\n"), HAL_MAX_DELAY);
+			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+CMGS=\"+39receiver\"\r\n", sizeof("AT+CMGS=\"+39receiver\"\r\n"), HAL_MAX_DELAY);
 			HAL_UART_Receive_IT(&huart1, GSM_response, CMGS_LEN);
 			break;
 		case SMS:
@@ -151,7 +149,7 @@ static void send_AT_command(uint8_t command) {
 			break;
 		case CPIN:
 			GSM_new_response_size = CPIN_LEN;
-			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+CPIN=3782\r\n", sizeof("AT+CPIN=3782\r\n"), HAL_MAX_DELAY);
+			HAL_UART_Transmit(&huart1, (uint8_t*)"AT+CPIN=my_pin\r\n", sizeof("AT+CPIN=my_pin\r\n"), HAL_MAX_DELAY);
 			HAL_UART_Receive_IT(&huart1, GSM_response, CPIN_LEN);
 			break;
 		case CSCS:
@@ -350,7 +348,7 @@ static bool parse_AT_response(uint8_t req_id) {
 static bool send_and_wait_AT(uint8_t command) {
 	// Tries 5 times to send a command. Waits for UART interrupt to notify the GSM module response
 	bool res = false;
-	uint32_t n = 10000000;
+	uint32_t n = UINT32_MAX;
 	uint8_t i = 5;
 	do {
 		send_AT_command(command);
@@ -420,7 +418,6 @@ bool GSM_init() {
 	if(res) {
 		// GSM software reset to recover from a possible inconsistent state
 		res = GSM_soft_reset();
-		//res = send_and_wait_AT(CPIN);
 		if(res) {
 			// Check network registration status with AT+CREG
 			res = send_and_wait_AT(CREG);
