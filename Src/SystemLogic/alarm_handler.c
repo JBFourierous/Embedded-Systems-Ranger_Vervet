@@ -6,9 +6,8 @@
  */
 
 #include "alarm_handler.h"
-#include "GSM_board.h"
 
-uint32_t alarm_start_time = 0;
+uint32_t alarm_start_time = 0;				// start time of alarm handling procedure
 
 /** @brief  According to the alarm signaled handles it with the corresponding procedure
 *   @param  alarm_type char indicating the alarm type
@@ -29,7 +28,7 @@ void handle_alarm(char alarm_type) {
 			start_alarm_sound(ULTRASOUND_FREQ);
 			break;
 		// land alarm signaled, handling procedure:
-	    // - stop audio recording
+	    	// - stop audio recording
 		// - set the general alarm flag to 'l' to acknowledge system watchdog
 		// - turn on leds to scare the attacking animal or to warn the ill-intentioned;
 		// - generate high frequency sound to scare the possible attacking animal;
@@ -41,16 +40,15 @@ void handle_alarm(char alarm_type) {
 			microphone_mode(false);
 			current_alarm = 'l';
 			alarm_start_time = HAL_GetTick();
-			//if(!GSM_mode(true))							// unable to wakeup GSM
-				//break;
+			if(!GSM_mode(true))						// unable to wakeup GSM
+				break;
 			camera_mode(true);
 			motor_turn(audio_source);
-			camera_capture_image_PC();
+			camera_capture_image_PC();					// only for demonstration purposes
 			start_alarm_sound(ULTRASOUND_FREQ);
 			leds_on = true;
-			//if(!GSM_send_HTTP())						// if unable to send image via HTTP send a warning message
-				//GSM_send_SMS();
-			//GSM_send_SMS();
+			if(!GSM_send_HTTP())						// if unable to send image via HTTP send a warning SMS
+				GSM_send_SMS();
 			break;
 		// snake alarm signaled, handling procedure:
 		// - stop audio recording
