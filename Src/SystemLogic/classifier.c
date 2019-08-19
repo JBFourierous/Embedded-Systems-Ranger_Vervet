@@ -2057,15 +2057,14 @@ char classify(float32_t* input) {
 		swap_char(&id[1], &id[2]);
 	}
 	end = HAL_GetTick();
+	// increase long classifications counter
 	if(end-start > 600)
 		long_classification_time++;
 	// return the id corresponding to the maximum correlation
 	if(fabsf(corrs[2]) > fabsf(1.5*corrs[1]))
-		//return id[2];
-		return 'l';
+		return id[2];
 	else
-		//return 'n';
-		return 'l';
+		return 'n';
 }
 
 // ------------------------------------------------ END OF INTERFACE FUNCTIONS -------------------------------------------------------- //
