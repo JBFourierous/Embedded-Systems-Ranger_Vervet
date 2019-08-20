@@ -1983,13 +1983,13 @@ static float32_t correlate(float32_t* input, const float32_t* sample) {
 	float32_t max = -0.00001, xcorr = 0;
 	bool backwards = false;
 	int delay = 0, index = 0, limit = 0;
-	for(delay = -INPUT_SIZE; delay < INPUT_SIZE; delay+=70) {
+	for(delay = -INPUT_SIZE; delay < INPUT_SIZE; delay+=100) {
 		if(delay < 0) {
 			backwards = false;
 			limit = INPUT_SIZE + delay;
 		} else {
 			backwards = true;
-			limit = delay;
+			limit = 5 - delay;
 		}
 		for(index = 0; index < limit; index++) {
 			if(backwards) {
@@ -2000,10 +2000,10 @@ static float32_t correlate(float32_t* input, const float32_t* sample) {
 		}
 		if(xcorr > max)
 			max = xcorr;
+		xcorr = 0;
 	}
 	return max;
 }
-
 
 /** @brief  Filters an input sequence and evaluates its maximum correlation with a second input sequence after FIR filtering
  *  @param  input    pointer to the first input sequence
