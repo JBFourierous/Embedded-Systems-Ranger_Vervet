@@ -35,7 +35,7 @@ void handle_alarm(char alarm_type) {
 		// - wake up GSM board;
 		// - wake up camera board;
 		// - turn camera in sound direction and take a picture;
-		// - send the picture via GPRS network;
+		// - send the picture via GPRS network or send warning SMS;
 		case 'l':
 			microphone_mode(false);
 			current_alarm = 'l';
