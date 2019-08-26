@@ -83,11 +83,11 @@ void record_audio() {
 	// Localize audio source according to signal power
 	if(pow1 > pow2) {
 		if(pow1 > pow3)
-			audio_source = 0;
+			audio_source = 1;
 		else
 			audio_source = 2;
 	} else if(pow2 > pow3)
-		audio_source = 1;
+		audio_source = 0;
 	else
 		audio_source = 2;
 	// Handle detected alarm
