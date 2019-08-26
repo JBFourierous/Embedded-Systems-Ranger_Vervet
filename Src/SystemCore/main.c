@@ -150,13 +150,9 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  // ------------------------------------------------- SYSTEM STATUS ------------------------------------------------------- //
 	  if(!system_ok) {									// if any device is not working shutdown all
-		  HAL_UART_Transmit(&huart2, (uint8_t*)"Something went wrong...\r\n", sizeof("Something went wrong...\r\n"), HAL_MAX_DELAY);
-		  HAL_Delay(3000);
 		  system_shutdown();
 	  }
-	  user_led();
-	  //HAL_UART_Transmit(&huart2, (uint8_t*)"Tutto ok\r\n", sizeof("Tutto ok\r\n"), HAL_MAX_DELAY);
-									// external user signaling
+	  user_led();									// external user signaling
 	  // ----------------------------------------------------------------------------------------------------------------------- //
   }
   /* USER CODE END 3 */
@@ -231,13 +227,11 @@ void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc) {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	// Control alarm handling
 	if(htim->Instance == TIM11) {
-		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		if(current_alarm != 'n')
 			alarm_timeout();
 	}
 	// Led matrix flash effect
 	if(htim->Instance == TIM9) {
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		if(flash && leds_on)
 			turn_on_led_matrix();
 		else
@@ -314,7 +308,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  //system_shutdown();
+  system_shutdown();
   /* USER CODE END Error_Handler_Debug */
 }
 
