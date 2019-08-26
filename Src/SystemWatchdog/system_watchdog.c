@@ -72,7 +72,6 @@ bool system_init() {
 		return false;
 	else {
 		camera_init();						// initialize camera
-		if(GSM_init()) {
 		if(GSM_init() && GSM_GPRS_init()) {							// initialize GSM board
 			// verify that external devices are ok
 			tmp = check_device(1) && check_device(2) && check_device(3);
