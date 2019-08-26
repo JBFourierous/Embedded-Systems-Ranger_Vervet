@@ -95,7 +95,6 @@ void turn_off_led_matrix() {
  *  @return none
  */
 void turn_on_led_matrix() {
-	uint32_t delay = (uint32_t)(ceilf(255.0/100)*2.0f);
 	int i;
 	for(i = 0; i < N_LEDS; i++) {
 		ws2812_setColor(i, WHITE);
