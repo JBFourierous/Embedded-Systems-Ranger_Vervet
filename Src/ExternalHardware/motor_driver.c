@@ -16,10 +16,10 @@
 void motor_turn(uint8_t direction) {
 	switch(direction) {
 	// Move from center to right, so rotate clockwise of 45 degrees. In full Step mode each step of the sequence moves the motor of
-	// 0.176°, so a 45° rotation requires about 64 steps sequences. By means of varying the delay between each steps sequence the angular
+	// 0.176Â°, so a 45Â° rotation requires about 64 steps sequences. By means of varying the delay between each steps sequence the angular
 	// speed of the motor can be modified. With full mode is possible to drive full torque on the axis, which is more suitable for the
 	// device in order to move a load, as the camera.
-	case 1:
+	case RIGHT:
 		for(uint8_t i = 0; i < SEQUENCES; i++) {
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
@@ -44,7 +44,7 @@ void motor_turn(uint8_t direction) {
 		}
 		break;
 	// Move from center to left, so rotate anticlockwise of 45 degrees, with inverted sequences. Same considerations as before.
-	case 2:
+	case LEFT:
 		for(uint8_t i = 0; i < SEQUENCES; i++) {
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
@@ -85,8 +85,8 @@ void motor_turn(uint8_t direction) {
  */
 void motor_default(uint8_t current_position) {
 	switch(current_position) {
-	// Go back to center from right, counterclockwise 45°
-	case 1:
+	// Go back to center from right, counterclockwise 45Â°
+	case RIGHT:
 		for(uint8_t i = 0; i < SEQUENCES; i++) {
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
@@ -110,8 +110,8 @@ void motor_default(uint8_t current_position) {
 			HAL_Delay(2);
 		}
 		break;
-	// Go back to center from left, clockwise 45°
-	case 2:
+	// Go back to center from left, clockwise 45Â°
+	case LEFT:
 		for(uint8_t i = 0; i < SEQUENCES; i++) {
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
