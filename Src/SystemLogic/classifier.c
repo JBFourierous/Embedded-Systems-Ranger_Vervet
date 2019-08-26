@@ -2061,7 +2061,7 @@ char classify(float32_t* input) {
 	if(end-start > 600)
 		long_classification_time++;
 	// return the id corresponding to the maximum correlation
-	if(fabsf(corrs[2]) > fabsf(1.5*corrs[1]))
+	if(fabsf(corrs[2]) > fabsf(2*corrs[1]))
 		return id[2];
 	else
 		return 'n';
